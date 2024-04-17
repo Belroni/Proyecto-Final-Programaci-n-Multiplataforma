@@ -1,9 +1,11 @@
 import useOrder from "../hooks/useOrder"
 import Category from "./Category"
+import { useAuth } from "../hooks/useAuth"
 
 export default function Sidebar() {
     
     const {categories} = useOrder()
+    const {logout, user} = useAuth({middleware: 'auth'})
 
     return (
     <aside className='md:w-72'>
@@ -14,6 +16,9 @@ export default function Sidebar() {
                 alt="logo image"
             />
         </div>
+
+        <p className="my-10 text-xl text-center">Hi, {user?.name}!</p>
+
 
         <div className="mt-10">
             {categories.map( category => (
@@ -28,6 +33,7 @@ export default function Sidebar() {
             <button
                 type="button"
                 className="text-center bg-red-600 w-full p-3 font-bold text-white truncate"
+                onClick={logout}
             >
                 Cancel order
             </button>

@@ -67,6 +67,41 @@ const OrderProvider = ({children}) => {
         setOrder(updatedOrder)
         toast.success('Removed from order')
     }
+
+    const handleSubmitNewOrder= async (logout) => {
+        const token = localStorage.getItem('AUTH_TOKEN')
+        try {
+            const {data} = await clientAxios.post('/api/orders', 
+            {
+                total,
+                products: order.map(product => {
+                    return {
+                        id: product.id,
+                        quantity: product.quantity
+                    }
+                })
+            }, 
+            {   // Autenticar usuario
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            toast.success(data.message);
+            setTimeout(() => {
+                 setPedido([])
+            }, 1000);
+
+            // Cerrar la sesión del usuario
+            setTimeout(() => {
+                localStorage.removeItem('AUTH_TOKEN');
+                    logout();
+            }, 3000);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <OrderContext.Provider
             value={{ 
@@ -81,7 +116,8 @@ const OrderProvider = ({children}) => {
                 handleAddOrder,
                 handleEditQuantity,
                 handleRemoveOrderProduct,
-                total
+                total,
+                handleSubmitNewOrder
             }}
         >{children}</OrderContext.Provider>
     )

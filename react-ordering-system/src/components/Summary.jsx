@@ -1,11 +1,20 @@
 import { moneyFormat } from "../helpers";
 import useOrder from "../hooks/useOrder"
+import { useAuth } from "../hooks/useAuth";
 import ProductSummary from "./ProductSummary";
 
 export default function Summary() {
   
-  const { order, total } = useOrder();
+  const { order, total, handleSubmitNewOrder } = useOrder();
+  const { logout } = useAuth({})
   const confirmOrder = () => order.length === 0
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    
+    handleSubmitNewOrder(logout);
+}
+
 
   return (
     <aside className='md:w-72 h-screen overflow-y-scroll p-5'>
@@ -31,7 +40,10 @@ export default function Summary() {
         Total: {''}
         {moneyFormat(total)}
       </p>
-      <form className="w-full">
+      <form 
+        className="w-full" 
+        onSubmit={handleSubmit}
+      >
         <div className="mt-5">
           <input 
             type="submit"
