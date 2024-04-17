@@ -1,11 +1,20 @@
-import { useState } from "react"; 
+import { useState, useEffect } from "react"; 
 import useOrder from "../hooks/useOrder"
 import { moneyFormat } from "../helpers";
 
 export default function ProductModal() {
 
-    const { product, handleClickModal } = useOrder();
+    const { product, handleClickModal, handleAddOrder, order } = useOrder();
     const [quantity, setQuantity] = useState(1);
+    const [edition, setEdition] = useState(false);
+
+    useEffect(() => {
+        if(order.some( orderState => orderState.id === product.id )) {
+            const productEdition = order.filter( orderState => orderState.id === product.id)[0]
+            setQuantity(productEdition.quantity)
+            setEdition(true)
+        }
+    }, [order])
 
   return (
     <div className="md:flex 
@@ -60,8 +69,12 @@ export default function ProductModal() {
         <button
             type="button"
             className="bg-indigo-600 hover:bg-indigo-800 px-5 py-2 mt-5 text-white font-bold uppercase rounded"
+            onClick={() => {
+                handleAddOrder({...product, quantity})
+                handleClickModal()
+            }}
         >
-            Add to order
+        {edition ? 'Save changes' : 'Add to order'}
         </button>
       </div>
     </div>

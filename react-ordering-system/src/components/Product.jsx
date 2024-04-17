@@ -2,7 +2,7 @@ import { moneyFormat } from "../helpers"
 import useOrder from "../hooks/useOrder"
 
 export default function Product({product}) {
-    const { handleClickModal, handlesetProduct } = useOrder();
+    const { handleClickModal, handleSetProduct } = useOrder();
     const { name, image, price } = product
     return (
         <div className='border p-3 shadow bg-white'>
@@ -21,7 +21,7 @@ export default function Product({product}) {
                     className="bg-indigo-600 hover:bg-indigo-800 text-white w-full mt-5 p-3 uppercase font-bold"
                     onClick={() => {
                         handleClickModal();
-                        handlesetProduct(product);
+                        handleSetProduct(product);
                     }}
                 >
                     Add
